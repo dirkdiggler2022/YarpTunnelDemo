@@ -8,8 +8,11 @@ var url = builder.Configuration["Tunnel:Url"]!;
 
 builder.WebHost.UseTunnelTransport(url);
 
+
+
 var app = builder.Build();
 
 app.MapReverseProxy();
 
+app.MapGet("/", (HttpContext context) => $"Hello World on connection {context.Connection.Id}!");
 app.Run();
