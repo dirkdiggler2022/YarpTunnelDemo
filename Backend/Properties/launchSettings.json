@@ -10,7 +10,6 @@
   "profiles": {
     "Backend": {
       "commandName": "Project",
-      "externalUrlConfiguration": true,
       "dotnetRunMessages": true,
       "launchBrowser": false,
       "applicationUrl": "https://localhost:7207;http://localhost:5207",
