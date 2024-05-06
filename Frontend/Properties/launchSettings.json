@@ -1,21 +1,14 @@
-﻿{
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
-    "iisExpress": {
-      "applicationUrl": "http://localhost:53549",
-      "sslPort": 44380
-    }
-  },
+{
   "profiles": {
     "Frontend": {
       "commandName": "Project",
-      "dotnetRunMessages": true,
       "launchBrowser": true,
-      "applicationUrl": "https://*:7244;http://*:5244",
+      "applicationUrl": "https://thycotic.ihawu.space:7244;http://thycotic.ihawu.space:5244",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+        //"ASPNETCORE_URLS": "https://thycotic.ihawu.space:7244,http://thycotic.ihawu.space:5244"
+      },
+      "dotnetRunMessages": true
     },
     "IIS Express": {
       "commandName": "IISExpress",
@@ -23,6 +16,14 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
+    }
+  },
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:53549",
+      "sslPort": 44380
     }
   }
 }

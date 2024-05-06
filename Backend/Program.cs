@@ -14,5 +14,8 @@ var app = builder.Build();
 
 app.MapReverseProxy();
 
-app.MapGet("/", (HttpContext context) => $"Hello World on connection {context.Connection.Id}!");
+app.MapGet("/", (HttpContext context) =>
+{
+    return $"Hello World on connection {context.Connection.Id}!";
+});
 app.Run();
