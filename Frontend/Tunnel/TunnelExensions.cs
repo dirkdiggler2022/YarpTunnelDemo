@@ -13,36 +13,40 @@ public static class TunnelExensions
 
     public static IEndpointConventionBuilder MapHttp2Tunnel(this IEndpointRouteBuilder routes, string path)
     {
-        return routes.MapPost(path, static async (HttpContext context, string host, TunnelClientFactory tunnelFactory, IHostApplicationLifetime lifetime) =>
-        {
-            // HTTP/2 duplex stream
-            if (context.Request.Protocol != HttpProtocol.Http2)
-            {
-                return Results.BadRequest();
-            }
-
-            var (requests, responses) = tunnelFactory.GetConnectionChannel(host);
-
-            await requests.Reader.ReadAsync(context.RequestAborted);
-
-            var stream = new DuplexHttpStream(context);
-
-            using var reg = lifetime.ApplicationStopping.Register(() => stream.Abort());
-
-            // Keep reusing this connection while, it's still open on the backend
-            while (!context.RequestAborted.IsCancellationRequested)
-            {
-                // Make this connection available for requests
-                await responses.Writer.WriteAsync(stream, context.RequestAborted);
-
-                await stream.StreamCompleteTask;
-
-                stream.Reset();
-            }
-
-            return EmptyResult.Instance;
-        });
+        return routes.MapPost(path, HandlePost);
     }
+
+    static async Task<IResult> HandlePost(HttpContext context, string host, TunnelClientFactory tunnelFactory,
+        IHostApplicationLifetime lifetime)
+    {
+        // HTTP/2 duplex stream
+        if (context.Request.Protocol != HttpProtocol.Http2)
+        {
+            return Results.BadRequest();
+        }
+
+        var (requests, responses) = tunnelFactory.GetConnectionChannel(host);
+
+        await requests.Reader.ReadAsync(context.RequestAborted);
+
+        var stream = new DuplexHttpStream(context);
+
+        using var reg = lifetime.ApplicationStopping.Register(() => stream.Abort());
+
+        // Keep reusing this connection while, it's still open on the backend
+        while (!context.RequestAborted.IsCancellationRequested)
+        {
+            // Make this connection available for requests
+            await responses.Writer.WriteAsync(stream, context.RequestAborted);
+
+            await stream.StreamCompleteTask;
+
+            stream.Reset();
+        }
+
+        return EmptyResult.Instance;
+    }
+
 
     public static IEndpointConventionBuilder MapWebSocketTunnel(this IEndpointRouteBuilder routes, string path)
     {
