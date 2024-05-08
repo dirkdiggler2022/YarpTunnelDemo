@@ -50,10 +50,10 @@ app.MapReverseProxy();
 app.MapPost("/connect-h2", async (HttpContext context, string clusterId, IHostApplicationLifetime lifetime) =>
 {
     // HTTP/2 duplex stream
-    if (context.Request.Protocol != HttpProtocol.Http2)
-    {
-        return Results.BadRequest();
-    }
+    //if (context.Request.Protocol != HttpProtocol.Http2)
+    //{
+    //    return Results.BadRequest();
+    //}
 
     var stream = new DuplexHttpStream(context);
 
