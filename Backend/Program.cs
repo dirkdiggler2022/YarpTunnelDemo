@@ -5,12 +5,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseWebSocketTunnel(o => o.MaxConnectionCount = 10);
 builder.WebHost.ConfigureKestrel(o =>
 {
+    
     // Add the endpoint
-    o.Listen(new UriEndPoint(new("https://localhost:7244/connect")));
+    o.Listen(new UriEndPoint(new("https://88c2-70-126-4-249.ngrok-free.app/connect")));
 });
 
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
+app.MapGet("/", () =>
+{
+    return "Hello World!";
+});
 
 app.Run();
