@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.Connections;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddReverseProxy()
-       .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
+//builder.Services.AddReverseProxy()
+//       .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
 
 
@@ -28,6 +28,10 @@ builder.WebHost.ConfigureKestrel(o =>
 
 var app = builder.Build();
 
-app.MapReverseProxy();
+app.MapGet("/", () =>
+{
+    return "Working Now";
+});
+//app.MapReverseProxy();
 
 app.Run();
