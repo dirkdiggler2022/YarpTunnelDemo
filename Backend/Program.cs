@@ -8,7 +8,7 @@ builder.Services.AddReverseProxy()
 builder.WebHost.UseTunnelTransport(o =>
 {
     o.MaxConnectionCount = 1;
-    o.Transport = TransportType.HTTP2;
+    o.Transport = TransportType.WebSockets;
 });
 
 builder.WebHost.ConfigureKestrel(o =>
@@ -17,7 +17,7 @@ builder.WebHost.ConfigureKestrel(o =>
     // o.Listen(new UriEndPoint(new("https://localhost:7244/connect-ws")));
 
     // H2
-    o.Listen(new UriEndPoint(new("https://localhost:7244/connect-h2?clusterId=alpha")));
+    o.Listen(new UriEndPoint(new("https://localhost:7244/connect-ws?clusterId=alpha")));
 });
 
 var app = builder.Build();
