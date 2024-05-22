@@ -42,18 +42,17 @@ builder.WebHost.ConfigureKestrel(o =>
 
 var app = builder.Build();
 
-
-//app.UseWebSockets();
+app.UseWebSockets();
 
 app.MapReverseProxy();
 
 app.MapPost("/connect-h2", async (HttpContext context, string clusterId, IHostApplicationLifetime lifetime) =>
 {
     // HTTP/2 duplex stream
-    //if (context.Request.Protocol != HttpProtocol.Http2)
-    //{
-    //    return Results.BadRequest();
-    //}
+    if (context.Request.Protocol != HttpProtocol.Http2)
+    {
+        return Results.BadRequest();
+    }
 
     var stream = new DuplexHttpStream(context);
 
@@ -78,7 +77,7 @@ app.MapPost("/connect-h2", async (HttpContext context, string clusterId, IHostAp
 // This path should only be exposed on an internal port, the backend connects
 // to this endpoint to register a connection with a specific cluster. To further secure this, authentication
 // could be added (shared secret, JWT etc etc)
-app.MapGet("/connect-h2", async (HttpContext context, string clusterId, IHostApplicationLifetime lifetime) =>
+app.MapGet("/connect-ws", async (HttpContext context, string clusterId, IHostApplicationLifetime lifetime) =>
 {
     if (!context.WebSockets.IsWebSocketRequest)
     {
